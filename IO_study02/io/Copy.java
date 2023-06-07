@@ -23,6 +23,13 @@ public class Copy {
 		//copy("src/com/sxt/io/Copy.java", "copy.txt");
 		copy("p.jpg", "pcopy.jpg");
 	}
+	
+	/**
+	 * 文件的拷贝
+	 * 思考：利用递归拷贝文件夹
+	 * @param srcPath
+	 * @param destPath
+	 */
 	public static void copy(String srcPath, String destPath) {
 		//1、创建源
 		File src = new File(srcPath);//源头
@@ -37,7 +44,7 @@ public class Copy {
 			byte[] flush = new byte[1024]; //缓冲容器
 			int len = -1; //接收长度
 			while((len=is.read(flush))!=-1) {
-				os.write(flush, 0, len);
+				os.write(flush, 0, len);//分段写出
 				
 			}
 			os.flush();
@@ -62,6 +69,28 @@ public class Copy {
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public static void copy2(String srcPath, String destPath) {
+		//1、创建源
+		File src = new File(srcPath);//源头
+		File dest = new File(destPath);//目的地
+		//2、选择流
+		try(InputStream is = new FileInputStream(src);
+				OutputStream os = new FileOutputStream(dest);) {
+			//3、操作(分段读取)
+			byte[] flush = new byte[1024]; //缓冲容器
+			int len = -1; //接收长度
+			while((len=is.read(flush))!=-1) {
+				os.write(flush, 0, len);//分段写出
+				
+			}
+			os.flush();
+		} catch(FileNotFoundException e) {
+			e.printStackTrace();
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
